@@ -141,8 +141,8 @@ RRDDIM *rrddim_add_custom(RRDSET *st, const char *id, const char *name, collecte
     RRDHOST *host = st->rrdhost;
     rrdset_wrlock(st);
 
-    rrdset_flag_set(st, RRDSET_FLAG_SYNC_CLOCK);
-    rrdset_flag_clear(st, RRDSET_FLAG_UPSTREAM_EXPOSED);
+//    rrdset_flag_set(st, RRDSET_FLAG_SYNC_CLOCK);
+//    rrdset_flag_clear(st, RRDSET_FLAG_UPSTREAM_EXPOSED);
 
     RRDDIM *rd = rrddim_find(st, id);
     if(unlikely(rd)) {
@@ -170,7 +170,7 @@ RRDDIM *rrddim_add_custom(RRDSET *st, const char *id, const char *name, collecte
                                       rd->algorithm);
 
             rrddim_flag_clear(rd, RRDDIM_FLAG_ACLK);
-            rd->state->aclk_live_status = (rd->state->aclk_live_status == 0);
+            queue_dimension_to_aclk(rd);
             rrdset_flag_set(st, RRDSET_FLAG_SYNC_CLOCK);
             rrdset_flag_clear(st, RRDSET_FLAG_UPSTREAM_EXPOSED);
         }
